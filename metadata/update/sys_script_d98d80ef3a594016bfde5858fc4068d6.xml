@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>true</action_insert>
+        <action_query>false</action_query>
+        <action_update>false</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>x_1980074_itom_i_0_svc_evt</collection>
+        <condition/>
+        <description>Creates incidents for Down events and auto-resolves for Up events on the related CI.</description>
+        <execute_function>false</execute_function>
+        <filter_condition/>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>Auto Incident on Service Event</name>
+        <order>100</order>
+        <priority>100</priority>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[/**
+ * Business Rule script for Service Event (after insert).
+ *
+ * - If Event Type = Down and no open incident exists for the CI,
+ *   creates a new incident linked to that CI and stores the incident
+ *   reference back on the event record.
+ *
+ * - If Event Type = Up and an open auto-created incident exists for
+ *   the CI, resolves that incident with a resolution note.
+ */
+(function () {
+    var eventType = current.getValue('event_type');
+    var ciRef = current.getValue('ci_reference');
+
+    if (!ciRef) {
+        gs.debug('[ITOM Health] Skipping event - no CI reference set.');
+        return;
+    }
+
+    if (eventType === 'down') {
+        handleDownEvent();
+    } else if (eventType === 'up') {
+        handleUpEvent();
+    }
+
+    function handleDownEvent() {
+        // Check for existing open incident linked to this CI created by automation
+        var existing = new GlideRecord('incident');
+        existing.addQuery('cmdb_ci', ciRef);
+        existing.addQuery('state', '!=', '7');
+        existing.addQuery('state', '!=', '6');
+        existing.addQuery('short_description', 'STARTSWITH', '[ITOM Auto]');
+        existing.query();
+
+        if (existing.hasNext()) {
+            gs.debug('[ITOM Health] Open incident already exists for CI ' + ciRef + '. Skipping creation.');
+            return;
+        }
+
+        // Map event severity to incident impact/urgency
+        var severity = current.getValue('severity');
+        var impactMap = {
+            critical: '1',
+            major: '2',
+            minor: '3',
+            warning: '3',
+            info: '3'
+        };
+        var urgencyMap = {
+            critical: '1',
+            major: '2',
+            minor: '2',
+            warning: '3',
+            info: '3'
+        };
+
+        var impact = impactMap[severity] || '3';
+        var urgency = urgencyMap[severity] || '3';
+
+        // Create new incident
+        var inc = new GlideRecord('incident');
+        inc.initialize();
+        inc.setValue('short_description', '[ITOM Auto] Service Down - CI ' + ciRef);
+        inc.setValue('description',
+            'Auto-created by ITOM Infrastructure Health Tracker.\n' +
+            'Event Source: ' + current.getValue('event_source') + '\n' +
+            'Severity: ' + severity + '\n' +
+            'Timestamp: ' + current.getValue('timestamp'));
+        inc.setValue('cmdb_ci', ciRef);
+        inc.setValue('impact', impact);
+        inc.setValue('urgency', urgency);
+        inc.setValue('category', 'software');
+        var incSysId = inc.insert();
+
+        if (incSysId) {
+            gs.info('[ITOM Health] Created incident ' + incSysId + ' for CI ' + ciRef);
+
+            // Store the incident reference back on the event record
+            current.setValue('correlated_incident', incSysId);
+            current.update();
+        }
+    }
+
+    function handleUpEvent() {
+        var inc = new GlideRecord('incident');
+        inc.addQuery('cmdb_ci', ciRef);
+        inc.addQuery('state', '!=', '7');
+        inc.addQuery('state', '!=', '6');
+        inc.addQuery('short_description', 'STARTSWITH', '[ITOM Auto]');
+        inc.query();
+
+        while (inc.next()) {
+            inc.setValue('state', '6');
+            inc.setValue('close_code', 'Solved (Permanently)');
+            inc.setValue('close_notes',
+                'Auto-resolved by ITOM Infrastructure Health Tracker. ' +
+                'Service Up event received for CI ' + ciRef + '.');
+            inc.update();
+            gs.info('[ITOM Health] Auto-resolved incident ' + inc.getUniqueValue() + ' for CI ' + ciRef);
+        }
+    }
+})();
+]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-08-31 08:01:03</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>d98d80ef3a594016bfde5858fc4068d6</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Auto Incident on Service Event</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="ITOM Infrastructure Health Tracker" source="x_1980074_itom_i_0">06cb3f1547cfc7909378f884116d43b1</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="ITOM Infrastructure Health Tracker">06cb3f1547cfc7909378f884116d43b1</sys_scope>
+        <sys_update_name>sys_script_d98d80ef3a594016bfde5858fc4068d6</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-08-31 08:01:03</sys_updated_on>
+        <template/>
+        <when>after</when>
+    </sys_script>
+    <sys_translated_text action="delete_multiple" query="documentkey=d98d80ef3a594016bfde5858fc4068d6"/>
+</record_update>
