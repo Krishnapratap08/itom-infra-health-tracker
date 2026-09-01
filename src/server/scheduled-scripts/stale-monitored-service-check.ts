@@ -1,21 +1,6 @@
-/**
- * ITOM Stale Monitored Service Check - scheduled script module
- * ---------------------------------------------------------------------------
- * ITOM monitoring/heartbeat concept: a real monitoring pipeline doesn't
- * just react to events - it also has to notice when events *stop*
- * arriving, because "no news" from a dead monitoring agent looks
- * identical to "everything is fine" unless something actively checks for
- * silence. This job is that check.
- *
- * Every 15 minutes, any Monitored Service whose last_checked timestamp is
- * older than the 15-minute window (or was never set) gets flipped to
- * "Unknown" - distinct from "Down", because we genuinely don't know: the
- * service could be healthy and the monitoring agent could be the thing
- * that's broken.
- */
 import { gs, GlideDateTime, GlideRecord } from '@servicenow/glide'
 
-const STALE_WINDOW_SECONDS = 15 * 60 // 15 minutes
+const STALE_WINDOW_SECONDS = 15 * 60
 
 export function checkStaleMonitoredServices(): void {
     const staleThreshold = new GlideDateTime()
@@ -37,7 +22,7 @@ export function checkStaleMonitoredServices(): void {
     }
 
     if (staleCount > 0) {
-        gs.info('[ITOM Health] Marked ' + staleCount + ' monitored service(s) as Unknown due to a stale heartbeat (no event in the last 15 minutes).')
+        gs.info('[ITOM Health] Marked ' + staleCount + ' monitored service(s) as Unknown due to a stale heartbeat.')
     } else {
         gs.debug('[ITOM Health] Heartbeat check complete - no stale monitored services found.')
     }

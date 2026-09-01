@@ -57,6 +57,38 @@ declare global {
                         table: 'x_1980074_itom_i_0_mon_svc'
                         id: 'ca19840995aa477c90eb9b77e978d688'
                     }
+                    'demo-mon-svc-vmware-sd-07': {
+                        table: 'x_1980074_itom_i_0_mon_svc'
+                        id: '29e97c0800c64bbd839bd182e7879abe'
+                    }
+                    'itom-health-app-menu': {
+                        table: 'sys_app_application'
+                        id: 'f8f677601653451ca8314898de8f2005'
+                    }
+                    'itom-health-module-mon-svc': {
+                        table: 'sys_app_module'
+                        id: '0ca0fb4d4d0d4c1ab9133cb6ce4cba58'
+                    }
+                    'itom-health-module-report-event-volume': {
+                        table: 'sys_app_module'
+                        id: 'f1ff98a50a1d4936b856a3cc57d798f7'
+                    }
+                    'itom-health-module-report-open-incidents': {
+                        table: 'sys_app_module'
+                        id: '50ece29290ec4487b3c3cc4d89ae5c50'
+                    }
+                    'itom-health-module-report-problem-candidates': {
+                        table: 'sys_app_module'
+                        id: '2fe5bae5c87640fcb648934b8454ffc4'
+                    }
+                    'itom-health-module-reports-separator': {
+                        table: 'sys_app_module'
+                        id: '48a64c84512b4751a2f33c1a3057cd5b'
+                    }
+                    'itom-health-module-svc-evt': {
+                        table: 'sys_app_module'
+                        id: 'e0784c79f0fa4e3ba1ca90a2784c3821'
+                    }
                     'job-stale-monitored-service-check': {
                         table: 'sysauto_script'
                         id: '0b0a5327e8e24a31bb8b627e9fb767b9'

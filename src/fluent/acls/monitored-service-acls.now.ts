@@ -1,23 +1,3 @@
-/**
- * ACLs: Monitored Service (x_1980074_itom_i_0_mon_svc)
- * ---------------------------------------------------------------------------
- * RBAC rationale (see also fluent/roles/roles.now.ts and the security-guide
- * topic's "Trinity" model - roles AND condition AND script must all pass):
- *
- *   read   -> itom_health_user, itom_health_admin (both personas need to see
- *             service health on dashboards/lists).
- *   write / create / delete -> itom_health_admin only. Regular users should
- *             never be able to add a fake service, edit ownership, or delete
- *             the health record for a service they don't administer -
- *             that's configuration, not day-to-day operational data.
- *
- * adminOverrides: true keeps these from ever locking out a platform admin
- * during setup/troubleshooting, matching ServiceNow's own OOB convention.
- *
- * These four ACLs are adopted (via explicit keys in keys.ts) from the
- * records the application already had after being pulled from the PDI, so
- * deploying this file updates them in place instead of creating duplicates.
- */
 import '@servicenow/sdk/global'
 import { Acl } from '@servicenow/sdk/core'
 import { itomHealthUser, itomHealthAdmin } from '../roles/roles.now'
@@ -41,7 +21,7 @@ export const monSvcWriteAcl = Acl({
     decisionType: 'allow',
     roles: [itomHealthAdmin],
     adminOverrides: true,
-    description: 'Only ITOM Health admins can edit Monitored Service records (e.g. reassign owner group, correct the CI mapping).',
+    description: 'Only ITOM Health admins can edit Monitored Service records.',
 })
 
 export const monSvcCreateAcl = Acl({

@@ -1,20 +1,3 @@
-/**
- * ACLs: Service Event (x_1980074_itom_i_0_svc_evt)
- * ---------------------------------------------------------------------------
- * Same read-vs-write split as Monitored Service:
- *
- *   read              -> itom_health_user, itom_health_admin
- *   write/create/delete -> itom_health_admin only
- *
- * In a production Event Management setup, events are written by an
- * integration user (MID Server / API credentials), not by end users
- * through the UI - restricting create/write/delete to the admin role here
- * models that same principle of "events are a system-of-record fed by
- * automation, not hand-edited."
- *
- * Adopted (via explicit keys in keys.ts) from the ACLs already present on
- * the instance from the initial PDI pull.
- */
 import '@servicenow/sdk/global'
 import { Acl } from '@servicenow/sdk/core'
 import { itomHealthUser, itomHealthAdmin } from '../roles/roles.now'
@@ -49,7 +32,7 @@ export const svcEvtCreateAcl = Acl({
     decisionType: 'allow',
     roles: [itomHealthAdmin],
     adminOverrides: true,
-    description: 'Only ITOM Health admins can create Service Event records (represents the monitoring integration account in this demo).',
+    description: 'Only ITOM Health admins can create Service Event records.',
 })
 
 export const svcEvtDeleteAcl = Acl({
