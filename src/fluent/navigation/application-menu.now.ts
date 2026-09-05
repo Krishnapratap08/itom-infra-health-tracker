@@ -1,6 +1,6 @@
 import '@servicenow/sdk/global'
 import { ApplicationMenu, Record } from '@servicenow/sdk/core'
-import { eventVolumeBySeverityReport, openIncidentsByCiReport, problemCandidateServicesReport } from '../reports/itom-reports.now'
+import { eventVolumeBySeverityReport, openIncidentsByCiReport, problemCandidateServicesReport, cmdbHealthIssuesReport } from '../reports/itom-reports.now'
 
 const itomHealthMenu = ApplicationMenu({
     $id: Now.ID['itom-health-app-menu'],
@@ -84,5 +84,18 @@ export const problemCandidateReportModule = Record({
         report: problemCandidateServicesReport,
         active: true,
         order: 330,
+    },
+})
+
+export const cmdbHealthReportModule = Record({
+    $id: Now.ID['itom-health-module-report-cmdb-health'],
+    table: 'sys_app_module',
+    data: {
+        title: 'CMDB Health Issues',
+        application: itomHealthMenu,
+        link_type: 'REPORT',
+        report: cmdbHealthIssuesReport,
+        active: true,
+        order: 340,
     },
 })

@@ -25,6 +25,10 @@ declare global {
                         table: 'sys_security_acl'
                         id: '532f1157577f40e0804fc43a47783ea5'
                     }
+                    'acl-rest-service-event-execute': {
+                        table: 'sys_security_acl'
+                        id: '0f3780d29fac4363a70f14707f73c26a'
+                    }
                     'acl-svc-evt-create': {
                         table: 'sys_security_acl'
                         id: 'd44f94054e87400980e4acec52d8f2b5'
@@ -69,6 +73,10 @@ declare global {
                         table: 'sys_app_module'
                         id: '0ca0fb4d4d0d4c1ab9133cb6ce4cba58'
                     }
+                    'itom-health-module-report-cmdb-health': {
+                        table: 'sys_app_module'
+                        id: 'bbb862445b2a42aca4e9c4a31d70bbf3'
+                    }
                     'itom-health-module-report-event-volume': {
                         table: 'sys_app_module'
                         id: 'f1ff98a50a1d4936b856a3cc57d798f7'
@@ -89,6 +97,10 @@ declare global {
                         table: 'sys_app_module'
                         id: 'e0784c79f0fa4e3ba1ca90a2784c3821'
                     }
+                    'job-cmdb-health-check': {
+                        table: 'sysauto_script'
+                        id: '527e3d31fddb4353ad54d6e41e787753'
+                    }
                     'job-stale-monitored-service-check': {
                         table: 'sysauto_script'
                         id: '0b0a5327e8e24a31bb8b627e9fb767b9'
@@ -96,6 +108,10 @@ declare global {
                     package_json: {
                         table: 'sys_module'
                         id: 'c5be9c6514c84063aaab509b776699a8'
+                    }
+                    'report-cmdb-health-issues': {
+                        table: 'sys_report'
+                        id: '2ab9f5ff9f1c442aa71f0ebd250ad534'
                     }
                     'report-event-volume-by-severity': {
                         table: 'sys_report'
@@ -108,6 +124,18 @@ declare global {
                     'report-problem-candidate-services': {
                         table: 'sys_report'
                         id: '3bda3e769c7841e0be482c8cabb0ea35'
+                    }
+                    'rest-api-itom-health': {
+                        table: 'sys_ws_definition'
+                        id: '4c5f8c15d77845d2b3cb671f1f853c27'
+                    }
+                    'rest-route-events-post': {
+                        table: 'sys_ws_operation'
+                        id: '35c390e44815411382af938e4ccd814c'
+                    }
+                    'script-include-itom-cmdb-health-checker': {
+                        table: 'sys_script_include'
+                        id: '486af2fd79da4f62aa4ab8b39c4d5497'
                     }
                     'script-include-itom-cmdb-service-mapper': {
                         table: 'sys_script_include'
@@ -125,9 +153,21 @@ declare global {
                         table: 'sys_module'
                         id: '0d9fa4b8569b482da0cca7afb59ac134'
                     }
+                    'src_server_rest-apis_service-event-ingest_ts': {
+                        table: 'sys_module'
+                        id: 'ce2ee8346fef4aa08512b4b047ca8ede'
+                    }
+                    'src_server_scheduled-scripts_cmdb-health-check_js': {
+                        table: 'sys_module'
+                        id: '486cc3f0d13c4040a2851b77bb8f99ef'
+                    }
                     'src_server_scheduled-scripts_stale-monitored-service-check_ts': {
                         table: 'sys_module'
                         id: 'a5374f3e67b04b6ba1c949b09f1183c4'
+                    }
+                    'src_server_script-includes_itom-cmdb-health-checker_js': {
+                        table: 'sys_module'
+                        id: '480204f8f6884bd9a2f6a3bdb1e8eaf9'
                     }
                     'src_server_script-includes_itom-cmdb-service-mapper_js': {
                         table: 'sys_module'
@@ -184,6 +224,14 @@ declare global {
                         key: {
                             name: 'x_1980074_itom_i_0_svc_evt'
                             element: 'severity'
+                        }
+                    },
+                    {
+                        table: 'sys_dictionary'
+                        id: '154b4524e027448da9367d4aeb6923f5'
+                        key: {
+                            name: 'x_1980074_itom_i_0_mon_svc'
+                            element: 'cmdb_health_notes'
                         }
                     },
                     {
@@ -264,6 +312,15 @@ declare global {
                         key: {
                             name: 'x_1980074_itom_i_0_mon_svc'
                             element: 'problem_candidate'
+                        }
+                    },
+                    {
+                        table: 'sys_documentation'
+                        id: '2d0cac8a31d94b189968a803c69f9ce2'
+                        key: {
+                            name: 'x_1980074_itom_i_0_mon_svc'
+                            element: 'cmdb_health_notes'
+                            language: 'en'
                         }
                     },
                     {
@@ -375,6 +432,14 @@ declare global {
                         key: {
                             name: 'x_1980074_itom_i_0_svc_evt'
                             element: 'event_type'
+                        }
+                    },
+                    {
+                        table: 'sys_dictionary'
+                        id: '79bfb1988528418f8badebaf00feccd2'
+                        key: {
+                            name: 'x_1980074_itom_i_0_mon_svc'
+                            element: 'cmdb_health_issue'
                         }
                     },
                     {
@@ -520,6 +585,19 @@ declare global {
                         id: 'bad51bff1228440381aaa3cbe7476915'
                         key: {
                             name: 'x_1980074_itom_i_0.itom_health_user'
+                        }
+                    },
+                    {
+                        table: 'sys_security_acl_role'
+                        id: 'bb6f85edc30d477c99b2b52c4a30bd04'
+                        key: {
+                            sys_security_acl: '0f3780d29fac4363a70f14707f73c26a'
+                            sys_user_role: {
+                                id: 'd2fd947d641e4809b58b5e610a02bced'
+                                key: {
+                                    name: 'x_1980074_itom_i_0.itom_health_admin'
+                                }
+                            }
                         }
                     },
                     {
@@ -695,6 +773,15 @@ declare global {
                         key: {
                             name: 'x_1980074_itom_i_0_mon_svc'
                             element: 'ci_reference'
+                            language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_documentation'
+                        id: 'e6ebae9d445f4ef898477bd75aea3df0'
+                        key: {
+                            name: 'x_1980074_itom_i_0_mon_svc'
+                            element: 'cmdb_health_issue'
                             language: 'en'
                         }
                     },

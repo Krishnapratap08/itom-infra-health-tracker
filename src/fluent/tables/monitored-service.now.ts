@@ -48,6 +48,16 @@ export const x_1980074_itom_i_0_mon_svc = Table({
             label: [{ label: 'Problem Candidate', help: 'Auto-set to true when the underlying CI has generated 3 or more auto-created incidents within 24 hours.' }],
             default: false,
         }),
+
+        cmdb_health_issue: BooleanColumn({
+            label: [{ label: 'CMDB Health Issue', help: 'Set by the CMDB Health Check job when this record has a missing/broken/duplicate CI reference or no owner group.' }],
+            default: false,
+        }),
+
+        cmdb_health_notes: StringColumn({
+            label: [{ label: 'CMDB Health Notes', help: 'Details of the CMDB health issue(s) found, refreshed on every run of the CMDB Health Check job.' }],
+            maxLength: 500,
+        }),
     },
     index: [
         { name: 'idx_mon_svc_ci_reference', element: 'ci_reference', unique: false },

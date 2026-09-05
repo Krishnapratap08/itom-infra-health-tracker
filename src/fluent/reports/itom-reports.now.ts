@@ -40,3 +40,16 @@ export const problemCandidateServicesReport = Record({
         is_published: true,
     },
 })
+
+export const cmdbHealthIssuesReport = Record({
+    $id: Now.ID['report-cmdb-health-issues'],
+    table: 'sys_report',
+    data: {
+        title: 'ITOM Health – CMDB Health Issues',
+        table: 'x_1980074_itom_i_0_mon_svc',
+        type: 'list',
+        filter: 'cmdb_health_issue=true',
+        active: true,
+        is_published: true,
+    },
+})
